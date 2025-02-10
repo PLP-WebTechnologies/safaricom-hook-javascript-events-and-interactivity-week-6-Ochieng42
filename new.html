@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS events and Interactivity</title>
+    <style>
+        body {
+            background-color: green;
+            color: yellow;
+            font-family: sans-serif;
+        }
+
+        h1, h2 {
+            color: yellow;
+        }
+
+        button {
+            font: 100;
+            font-family: sans-serif;
+            padding: 10px;
+            margin: 2px;
+            border: solid rgb(114, 101, 101);
+            background-color: blueviolet;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        input[type="range"] {
+            width: 200px;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        #myModal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: pink;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            border: none;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        #closeModalBtn {
+            display: none;  /* Hide the close button */
+        }
+
+        #closeModalBtn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #closeModalBtn:hover,
+        #closeModalBtn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive JS</h1>
+    <button id="color-btn">click me</button>
+
+    <h2>Adjust the slider</h2>
+    <label for="slider">value :</label>
+    <input type="range" id="slider" min="10" max="100" value="55" step="1">
+    <p>value is:<span id="slider-value">55</span></p>
+
+    <h2>adjust text</h2>
+    <label for="textSizeSlider">font size</label>
+    <input type="range" id="textSizeSlider" min="10" max="50" value="16" step="1">
+    <p id="dynamicText">This is the dynamic text</p>
+
+    <button class="openmodalbtn" id="modal">modal button</button>
+    <div id="myModal" class="modal">
+        <div id="modal-content">
+            <span id="closeModalBtn">×</span>
+            <p>you have opened the modal</p>
+        </div>
+    </div>
+
+    <script>
+        const btn = document.getElementById("color-btn");
+        let isDark = false;
+
+        btn.onclick = function () {
+            if (isDark) {
+                document.body.style.backgroundColor = "green";
+                document.body.style.color = "yellow";
+            } else {
+                document.body.style.backgroundColor = "brown";
+                document.body.style.color = "gold";
+            }
+            isDark = !isDark;
+        }
+
+        const slider = document.getElementById("slider");
+        const sliderValue = document.getElementById("slider-value");
+
+        slider.oninput = function () {
+            sliderValue.textContent = this.value;
+        };
+        sliderValue.textContent = slider.value;
+
+        const textSizeSlider = document.getElementById("textSizeSlider");
+        const dynamicText = document.getElementById("dynamicText");
+
+        textSizeSlider.oninput = function () {
+            const FontSize = this.value + "px";
+            dynamicText.style.fontSize = FontSize;
+        };
+        dynamicText.style.fontSize = textSizeSlider.value + "px";
+
+        const openmodalbtn = document.querySelector(".openmodalbtn");
+        const modal = document.getElementById("myModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+
+        function openModal() {
+            modal.style.display = "flex"; /* Changed to flex */
+        }
+
+        function closeModal() {
+            modal.style.display = "none";
+        }
+
+        openmodalbtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+
+        window.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Form Validation</title>
+        <style>
+            body {
+                font-family: sans-serif;
+            }
+    
+            .error {
+                color: red;
+                font-size: 0.8em;
+            }
+    
+            .form-container {
+                width: 300px;
+                margin: 20px auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+            }
+            select {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+    
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form id="registrationForm">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <div id="nameError" class="error"></div>
+            </div>
+    
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <div id="emailError" class="error"></div>
+            </div>
+    
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div id="passwordError" class="error"></div>
+            </div>
+    
+            <select id="dropdown">
+                <option value="">Select an option</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
+            </select>
+            <div id="dropdownMessage"></div>
+    
+    
+            <button type="submit">Register</button>
+        </form>
+    </div>
+    
+    <script>
+        const form = document.getElementById('registrationForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const dropdown = document.getElementById('dropdown');
+        const dropdownMessage = document.getElementById('dropdownMessage');
+    
+        form.addEventListener('submit', function (event) {
+            let isValid = true;
+    
+            // Name validation
+            if (nameInput.value.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters.';
+                isValid = false;
+            } else {
+                nameError.textContent = '';
+            }
+    
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                emailError.textContent = 'Invalid email format.';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+    
+            // Password validation
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(passwordInput.value)) {
+                passwordError.textContent = 'Password must be at least 8 characters, with one uppercase letter and one number.';
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+    
+            if (!isValid) {
+                event.preventDefault(); // Prevent form submission
+            }
+        });
+    
+        dropdown.addEventListener('change', function() {
+            const selectedValue = this.value;
+            switch (selectedValue) {
+                case 'option1':
+                    dropdownMessage.textContent = "You selected Option 1!";
+                    break;
+                case 'option2':
+                    dropdownMessage.textContent = "You selected Option 2!";
+                    break;
+                case 'option3':
+                    dropdownMessage.textContent = "You selected Option 3!";
+                    break;
+                default:
+                    dropdownMessage.textContent = "";
+            }
+        });
+    
+    </script>
+    
+    </body>
+    </html>
+</body>
+</html>
